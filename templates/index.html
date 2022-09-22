@@ -15,7 +15,7 @@
             <form method="post" enctype="multipart/form-data">
                 <input type="file" name="file">
 
-                <input type="submit" value="Submit">
+                <input type="submit" value="Upload">
 
                 <h3>Uploaded Files:</h3>
             </form>
@@ -23,8 +23,8 @@
                     
               {% for file in files %}
                 <li>{{ file["file_name"] }}
-                  <a href="[FileName]" download="">
-                      <input type="button" value="Download">
+                  <a href="{{ file["file_name"] }}" download>
+                      <input method="get" type="button" value="Download">
                   </a>
                 
                 </li>
