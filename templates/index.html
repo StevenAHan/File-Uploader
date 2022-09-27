@@ -24,10 +24,7 @@
               {% for file in files %}
               <form  method="get"> 
                 <li name="the_file_name">{{ file["file_name"] }}
-                  <a href="{{ file["file_name"] }}" download>
-                      <input type="submit" value="Download">
-                  </a>
-                
+                  <button><a href={{ file["file_name"] }} download>Download</a></button>
                 </li>
               </form> 
               {% endfor %}
