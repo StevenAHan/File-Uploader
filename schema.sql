@@ -3,5 +3,5 @@ DROP TABLE IF EXISTS files;
 CREATE TABLE files (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     file_name TEXT NOT NULL,
-    file_blob TEXT NOT NULL
+    file_blob BLOB NOT NULL
 );
