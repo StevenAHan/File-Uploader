@@ -22,9 +22,10 @@
             <div id="UploadedFiles">
                     
               {% for file in files %}
-              <form  method="get"> 
+              <form> 
                 <li name="the_file_name">{{ file["file_name"] }}
-                  <button><a href={{ file["file_name"] }} download>Download</a></button>
+                  <button><a href=download/{{ file["file_name"] }}>Download</a></button>
+                  <button><a href=delete/{{ file["file_name"] }}>Delete</a></button>
                 </li>
               </form> 
               {% endfor %}
