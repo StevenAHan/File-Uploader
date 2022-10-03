@@ -9,6 +9,12 @@ def main():
       connection.executescript(f.read())
 
   cur = connection.cursor()
+
+  with open("./files/README_(Do_not_delete_please).txt", "rb") as file:
+    cur.execute("INSERT INTO files (file_name, file_blob) VALUES (?, ?)",
+              ("README_(Do_not_delete_please).txt", file.read())
+              )
+
   connection.commit()
   connection.close()
 

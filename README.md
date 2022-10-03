@@ -9,6 +9,11 @@ You must be able to use Flask. Download all the files, and when inside the folde
 py main.py
 ```
 
+If you want to reset the database, run 
+```
+py reset_db.py
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
