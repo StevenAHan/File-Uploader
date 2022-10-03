@@ -22,7 +22,7 @@ def insert_into_database(file):
     connection.commit()
     connection.close()
 
-
+# To get a file from the database
 def get_from_database(file_name):
     connection = sqlite3.connect("database.db")
 
@@ -37,7 +37,7 @@ def get_from_database(file_name):
     
     return file_blob
 
-
+# To remove a file from the database
 def remove_from_database(file_name):
     connection = sqlite3.connect("database.db")
 
@@ -48,7 +48,7 @@ def remove_from_database(file_name):
     connection.commit()
     connection.close()
 
-# default route
+# Default route
 @app.route("/")
 def index():
     conn = get_db_connection()
@@ -56,7 +56,7 @@ def index():
     conn.close()
     return render_template("index.html", files=files)
 
-# To Upload a file onto the database
+# Route to Upload a file onto the database
 @app.route("/", methods=["GET", "POST", "DELETE"])
 def upload_file():
     if request.method == "POST":
@@ -65,7 +65,7 @@ def upload_file():
         
     return redirect(url_for("index"))
 
-# To Download a file from the database
+# Route to Download a file from the database
 @app.route("/download/<file_name>")
 def download_file(file_name):
     f_blob =get_from_database(file_name)
@@ -75,7 +75,7 @@ def download_file(file_name):
         'Content-Disposition', 'attachment', filename=file_name)
     return response
 
-# To Delete a file from the database
+# Route to Delete a file from the database
 @app.route("/delete/<file_name>")
 def delete_file(file_name):
     remove_from_database(file_name)
