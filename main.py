@@ -48,10 +48,6 @@ def remove_from_database(file_name):
     connection.commit()
     connection.close()
 
-# To get a file from the database
-def get_file(file_name):
-    return ...
-
 # default route
 @app.route("/")
 def index():
@@ -69,6 +65,7 @@ def upload_file():
         
     return redirect(url_for("index"))
 
+# To Download a file from the database
 @app.route("/download/<file_name>")
 def download_file(file_name):
     f_blob =get_from_database(file_name)
@@ -78,6 +75,7 @@ def download_file(file_name):
         'Content-Disposition', 'attachment', filename=file_name)
     return response
 
+# To Delete a file from the database
 @app.route("/delete/<file_name>")
 def delete_file(file_name):
     remove_from_database(file_name)
