@@ -61,7 +61,8 @@ def index():
 def upload_file():
     if request.method == "POST":
         file = request.files["file"]
-        insert_into_database(file)
+        if(file.filename != ""):
+            insert_into_database(file)
         
     return redirect(url_for("index"))
 
