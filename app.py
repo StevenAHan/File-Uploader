@@ -15,7 +15,7 @@ def insert_into_database(file):
 
     file_name = file.filename.replace(" ", "_")
 
-    cur.execute("INSERT INTO files (file_name, file_blob) VALUES (?, ?)",
+    cur.execute("INSERT INTO files (file_name, file_blob) VALUES (%s, %s)",
               (file_name, file.read())
               )
 
@@ -84,8 +84,10 @@ def delete_file(file_name):
 
 # Connects to Database
 def get_db_connection():
-    conn = sqlite3.connect("database.db")
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(host='localhost',
+                            database='flask_db',
+                            user=os.environ['DB_USERNAME'],
+                            password=os.environ['DB_PASSWORD'])
     return conn
     
 if __name__ == "__main__":
