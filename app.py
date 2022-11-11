@@ -1,67 +1,55 @@
 from re import I
-import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect, make_response
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
+import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+        'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config["SECRET_KEY"] = "HAVEFUN!"
+db = SQLAlchemy(app)
+
+class files(db.Model):
+   id = db.Column("id", db.Integer, primary_key = True)
+   file_name = db.Column(db.String(100))
+   file_blob = db.Column(db.String(65535))
+
+def __init__(self, file_name, file_blob):
+   self.file_name = file_name
+   self.file_blob = file_blob
 
 # To insert a file into the database
 def insert_into_database(file):
-    connection = sqlite3.connect("database.db")
-
-
-    cur = connection.cursor()
-
-    file_name = file.filename.replace(" ", "_")
-
-    cur.execute("INSERT INTO files (file_name, file_blob) VALUES (%s, %s)",
-              (file_name, file.read())
-              )
-
-    connection.commit()
-    connection.close()
+    db.session.add(file)
+    db.session.commit()
 
 # To get a file from the database
 def get_from_database(file_name):
-    connection = sqlite3.connect("database.db")
-
-    cur = connection.cursor()
-
-    cur.execute("SELECT file_blob FROM files WHERE file_name=?", (file_name,))
-
-    file_blob = cur.fetchall()[0][0]
-
-    connection.commit()
-    connection.close()
-    
-    return file_blob
+    file = files.query.filter_by(file_name = file_name).first()
+    return file.file_blob
 
 # To remove a file from the database
 def remove_from_database(file_name):
-    connection = sqlite3.connect("database.db")
-
-    cur = connection.cursor()
-
-    cur.execute("DELETE FROM files WHERE file_name=?", (file_name,))
-
-    connection.commit()
-    connection.close()
+    file = files.query.filter_by(file_name = file_name).first()
+    db.session.delete(file)
+    db.session.commit()
 
 # Default route
 @app.route("/")
 def index():
-    conn = get_db_connection()
-    files = conn.execute("SELECT * FROM files").fetchall()
-    conn.close()
-    return render_template("index.html", files=files)
+    the_files = files.query.all()
+    return render_template("index.html", files=the_files)
 
 # Route to Upload a file onto the database
 @app.route("/", methods=["GET", "POST", "DELETE"])
 def upload_file():
     if request.method == "POST":
-        file = request.files["file"]
-        if(file.filename != ""):
+        the_file = request.files["file"]
+        file = files(file_name = the_file.filename.replace(" ", "_"), file_blob = the_file.read())
+        if(file.file_name != ""):
             insert_into_database(file)
         
     return redirect(url_for("index"))
@@ -81,14 +69,6 @@ def download_file(file_name):
 def delete_file(file_name):
     remove_from_database(file_name)
     return redirect(url_for("index"))
-
-# Connects to Database
-def get_db_connection():
-    conn = psycopg2.connect(host='localhost',
-                            database='flask_db',
-                            user=os.environ['DB_USERNAME'],
-                            password=os.environ['DB_PASSWORD'])
-    return conn
     
 if __name__ == "__main__":
     app.run(debug=True)
