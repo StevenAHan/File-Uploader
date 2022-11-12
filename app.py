@@ -3,12 +3,10 @@ from flask import Flask, render_template, request, url_for, flash, redirect, mak
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 import os
-from secretsYESYES import user, password, heroku_database_URI
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = ("postgresql://postgres:Etestnomenmeum1!@localhost/file_uploader")
-# app.config['SQLALCHEMY_DATABASE_URI'] = ("postgresql://" + user + ":"+ password + "@localhost/file_uploader") or heroku_database_URI
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://msizwihjuryyem:160b6d8fb521e2255d6f08aef4500e4028758af1a927cf5a046155ac663779b4@ec2-3-219-19-205.compute-1.amazonaws.com:5432/dbgggdr11demc6"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
