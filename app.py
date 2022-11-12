@@ -30,6 +30,7 @@ def insert_into_database(file):
 # To get a file from the database
 def get_from_database(file_name):
     file = files.query.filter_by(file_name = file_name).first()
+    print(file.file_name)
     return file.file_blob
 
 # To remove a file from the database
@@ -58,9 +59,8 @@ def upload_file():
 # Route to Download a file from the database
 @app.route("/download/<file_name>")
 def download_file(file_name):
-    f_blob =get_from_database(file_name)
-    image_binary = f_blob
-    response = make_response(image_binary)
+    f_blob = get_from_database(file_name)
+    response = make_response(f_blob)
     response.headers.set(
         'Content-Disposition', 'attachment', filename=file_name)
     return response
