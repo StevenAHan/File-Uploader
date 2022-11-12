@@ -19,6 +19,9 @@ class files(db.Model):
         self.file_name = file_name
         self.file_blob = file_blob
 
+with app.app_context():
+    db.create_all()
+
 # To insert a file into the database
 def insert_into_database(file):
     db.session.add(file)
